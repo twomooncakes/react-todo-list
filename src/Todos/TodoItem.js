@@ -1,26 +1,38 @@
-import css from '../styles/TodoItem.module.css';
-
+import styled from "styled-components";
 import { useState } from 'react';
+import Icon from "./Icon";
+
+const ListItem  = styled.li`
+    padding: 15px;
+    border-bottom: 1px solid lightgray;
+    text-decoration: ${props => props.isDone ? 'line-through' : ''};
+    color: ${props => props.isDone ? `rgba(${0}, ${0}, ${0}, ${0.555})` : '#212529'};
+
+    i {
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    i:last-child {
+        float: right;
+    }
+
+    input {
+        font-size: 1rem;
+        padding: 6px 8px;
+    }
+`;
+
+
 function TodoItem(props) {
     const [isEditOn, setIsEditOn] = useState(false);
     const [editedTitle, setEditedTitle] = useState(props.title);
-    // uncheked styles item, fa-circle-thin
-    // checked styles item line-through, fa-check-circle
-
-    const itemClasses = () => {
-    return props.isDone ? `${css.item} ${css['line-through']}` : css.item;
-    };
-    const checkCircleClasses = () => {
-    return `fa fa-${props.isDone ? 'check-circle' : 'circle-thin'}`;
-    };
-    // add title from props
 
     const sendDeleteId = (e) => {
         props.onTodoDelete(props.id);
     };
 
     const handleEditLocal = () => {
-        // send updated title with props
         if (isEditOn) {
             console.log('update', props.id, editedTitle);
             props.onTodoEdit(props.id, editedTitle);
@@ -33,8 +45,8 @@ function TodoItem(props) {
     };
 
     return (
-        <li className={itemClasses()}>
-            <i className={checkCircleClasses()} aria-hidden='true' onClick={handleCheckUncheck}></i>
+        <ListItem isDone={props.isDone}>
+            <Icon clickFunc={handleCheckUncheck} id={props.id} iconName={props.isDone ?  'check-circle' : 'circle-thin'}></Icon>
             {isEditOn ? (
             <input
                 type='text'
@@ -42,22 +54,14 @@ function TodoItem(props) {
                 onChange={(e) => setEditedTitle(e.target.value)}
             />
             ) : (
-            <span className='text'>
+            <span>
                 {' '}
                 {props.title} {' '}
             </span>
             )}
-            <i
-                onClick={handleEditLocal}
-                className='fa fa-pencil edit-icon'
-                aria-hidden='true'
-            ></i>
-            <i
-                onClick={sendDeleteId}
-                className='fa fa-trash delete-icon'
-                aria-hidden='true'
-            ></i>
-        </li>
+            <Icon clickFunc={handleEditLocal} iconName='pencil edit-icon'/>
+            <Icon clickFunc={sendDeleteId} iconName='trash delete-icon'/>
+        </ListItem>
     );
 }
 
