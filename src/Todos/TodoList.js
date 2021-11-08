@@ -1,14 +1,22 @@
-import css from '../styles/TodoList.module.css';
-
+import styled from "styled-components";
 import TodoItem from './TodoItem';
+
+const TodoUl = styled.ul`
+    list-style: none;
+    padding-left: 0;
+`;
+
+const MessageParagraph = styled.p`
+    text-align: center;
+    margin: 1.5rem;
+`;
 
 // TodoList
 function TodoList(props) {
     props.todos.sort((a, b) => a.isDone - b.isDone);
     return (
-        <ul id='list' className={css.list}>
-        
-        {props.todos.length === 0 ? <p className="text-center m-4">You have no tasks. Add a task below!</p> : props.todos.map((todo) => (
+        <TodoUl>
+        {props.todos.length === 0 ? <MessageParagraph>You have no tasks. Add a task below!</MessageParagraph> : props.todos.map((todo) => (
             <TodoItem
                 key={todo.id}
                 title={todo.title}
@@ -19,7 +27,8 @@ function TodoList(props) {
                 onTodoCheckUncheck={props.onTodoCheckUncheck}
             />
         ))}
-        </ul>
+        
+        </TodoUl>
     );
 }
 

@@ -1,5 +1,4 @@
-import css from './styles/TodoListPage.module.css';
-
+import styled from "styled-components";
 import { useState, useEffect } from 'react';
 import TodoAddNew from './Todos/TodoAddNew';
 import TodoHeader from './Todos/TodoHeader';
@@ -22,6 +21,31 @@ const initTodos = [
     isDone: false,
   },
 ];
+
+const MainWrapper = styled.div`
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    i {
+        cursor: pointer;
+    }
+`;
+
+const Container = styled.div`
+    margin-top: 2rem;
+    width: 500px;
+`;
+
+const Section = styled.section`
+    border: 1px solid lightgray;
+    border-top-color: transparent;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    margin-top: -5px;
+`;
 
 function TodoListPage() {
     const [todosArr, setTodosArr] = useState(initTodos);
@@ -47,8 +71,6 @@ function TodoListPage() {
         setTodosArr(filteredMainArr);
     };
 
-    // handleEditTodo - pass it down to TodoItem
-    // find item with id === id, update its title without modifying original arr
     const handleEditTodo = (editId, newTitle) => {
         console.log(`you want to edit todo '${ newTitle}' with id`, editId);
         const newTodosArr = todosArr.map((tObj) => {
@@ -109,25 +131,25 @@ function TodoListPage() {
     
 
     return (
-        <div className={css.mainEl}>
-        <div className={css.container}>
-        <TodoHeader 
-            todos={todosArr} 
-            handleReset={handleReset}
-            onNewHeaderImage={handleNewHeaderImage}
-            headerImage={headerImage}
-            isLoading={isLoading}
-        />
-        <section className={css.content}>
-            <TodoList 
-                todos={todosArr} 
-                onTodoDelete={handleTodoDelete} onTodoEdit={handleEditTodo} 
-                onTodoCheckUncheck={handleCheckUncheckTodo}
-            />
-            <TodoAddNew onAddNewTodo={handleAddNewTodo} />
-        </section>
-        </div>
-        </div>
+        <MainWrapper>
+            <Container>
+                <TodoHeader 
+                    todos={todosArr} 
+                    handleReset={handleReset}
+                    onNewHeaderImage={handleNewHeaderImage}
+                    headerImage={headerImage}
+                    isLoading={isLoading}
+                />
+                <Section>
+                    <TodoList 
+                        todos={todosArr} 
+                        onTodoDelete={handleTodoDelete} onTodoEdit={handleEditTodo} 
+                        onTodoCheckUncheck={handleCheckUncheckTodo}
+                    />
+                    <TodoAddNew onAddNewTodo={handleAddNewTodo} />
+                </Section>
+            </Container>
+        </MainWrapper>
     );
 }
 
