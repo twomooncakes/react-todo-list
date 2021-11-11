@@ -37,7 +37,10 @@ function todoReducer(todosArr, action) {
             return todosArr.filter(t => t.id !== action.payload);
         case ACTIONS.CHECK:
             return todosArr.map((t) => {
-                if (t.id === action.payload) return { ...t, isDone: !t.isDone };
+                if (t.id === action.payload) return { 
+                    ...t, 
+                    isDone: !t.isDone 
+                };
                 return t;
             });
         case ACTIONS.EDIT:
@@ -86,13 +89,13 @@ function TodoListPage() {
         }
     }
 
-    // create state todosArr using useState
     const handleAddNewTodo = (newTitle) => {
         dispatch({type: ACTIONS.ADD, payload: generateTodo(newTitle)})
     };
 
     const handleTodoDelete = (deleteId) => {
         console.log('you want to delete todo with id', deleteId);
+        dispatch({type: ACTIONS.DELETE, payload: deleteId});
         // const filteredMainArr = todosArr.filter((tObj) => tObj.id !== deleteId);
         // setTodosArr(filteredMainArr);
     };
