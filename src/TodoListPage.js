@@ -26,7 +26,8 @@ const ACTIONS = {
     ADD: 'add',
     DELETE: 'delete',
     CHECK: 'check',
-    EDIT: 'edit'
+    EDIT: 'edit',
+    RESET: 'reset',
 }
 
 function todoReducer(todosArr, action) {
@@ -44,7 +45,9 @@ function todoReducer(todosArr, action) {
                 return t;
             });
         case ACTIONS.EDIT:
-            
+            return console.log('edit');
+        case ACTIONS.RESET:
+            return todosArr = [];
         default:
             console.log('type not found');
             return todosArr;
@@ -96,8 +99,6 @@ function TodoListPage() {
     const handleTodoDelete = (deleteId) => {
         console.log('you want to delete todo with id', deleteId);
         dispatch({type: ACTIONS.DELETE, payload: deleteId});
-        // const filteredMainArr = todosArr.filter((tObj) => tObj.id !== deleteId);
-        // setTodosArr(filteredMainArr);
     };
 
     const handleEditTodo = (editId, newTitle) => {
@@ -116,26 +117,14 @@ function TodoListPage() {
     }
     console.log(todosArr);
 
-    const handleCheckUncheckTodo = (id) => {
-        console.log('check uncheck', id);
-        // const newTodosArr = todosArr.map((tObj) => {
-        //     if (tObj.id === id) {
-        //         console.log(tObj.isDone);
-        //         const updatedTObj = {
-        //             ...tObj,
-        //             isDone: !tObj.isDone,
-        //         };
-        //         return updatedTObj;
-        //     }
-        //     return tObj;
-        // })
-        // setTodosArr(newTodosArr);
+    const handleCheckUncheckTodo = (checkId) => {
+        console.log('check uncheck', checkId);
+        dispatch({type: ACTIONS.CHECK, payload: checkId});
     }
 
     const handleReset = () => {
         console.log('reset');
-        // setTodosArr([]);
-        // setTodoIdCounter(1);
+        dispatch({type: ACTIONS.RESET})
     }
 
     const [headerImage, setheaderImage] = useState('/img/gold.jpg');
@@ -145,8 +134,6 @@ function TodoListPage() {
         console.log('new image');
         setIsLoading(true);
         const resp = await fetch('https://picsum.photos/500/200');
-        
-        console.log(resp);
         setIsLoading(false);
         setheaderImage(resp.url);
     }
