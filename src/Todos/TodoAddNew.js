@@ -30,6 +30,7 @@ const AddNewContainer = styled.div`
 function TodoAddNew(props) {
     // create newTitle State
     const [newTitle, setNewTitle] = useState('');
+ 
     // bind state to input
     const handleNewTodoInput = (e) => {
         setNewTitle(e.target.value);

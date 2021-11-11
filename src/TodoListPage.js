@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useReducer } from 'react';
 import TodoAddNew from './Todos/TodoAddNew';
 import TodoHeader from './Todos/TodoHeader';
 import TodoList from './Todos/TodoList';
@@ -21,6 +21,32 @@ const initTodos = [
     isDone: false,
   },
 ];
+
+const ACTIONS = {
+    ADD: 'add',
+    DELETE: 'delete',
+    CHECK: 'check',
+    EDIT: 'edit'
+}
+
+function todoReducer(todosArr, action) {
+    switch(action.type) {
+        case ACTIONS.ADD:
+            return [...todosArr, action.payload];
+        case ACTIONS.DELETE:
+            return todosArr.filter(t => t.id !== action.payload);
+        case ACTIONS.CHECK:
+            return todosArr.map((t) => {
+                if (t.id === action.payload) return { ...t, isDone: !t.isDone };
+                return t;
+            });
+        case ACTIONS.EDIT:
+            
+        default:
+            console.log('type not found');
+            return todosArr;
+    }
+};
 
 const MainWrapper = styled.div`
     font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -48,65 +74,65 @@ const Section = styled.section`
 `;
 
 function TodoListPage() {
-    const [todosArr, setTodosArr] = useState(initTodos);
+    const [todosArr, dispatch] = useReducer(todoReducer, initTodos);
 
-    const [todoIdCounter, setTodoIdCounter] = useState(4);
-    // create state todosArr using useState
-    const handleAddNewTodo = (title) => {
-        console.log('add new');
-        const newTodoObj = {
-            id: todoIdCounter,
+    const lastTodoId = todosArr.length > 0 ? todosArr[todosArr.length-1].id : 0;
+
+    function generateTodo(title) {
+        return { 
+            id: lastTodoId + 1,
             title: title,
-            isDone: false,
-        };
-        const newTodoArrState = [...todosArr, newTodoObj];
-        setTodosArr(newTodoArrState);
-        setTodoIdCounter(() => todoIdCounter + 1);
-        handleNewHeaderImage();
+            doneStatus: false 
+        }
+    }
+
+    // create state todosArr using useState
+    const handleAddNewTodo = (newTitle) => {
+        dispatch({type: ACTIONS.ADD, payload: generateTodo(newTitle)})
     };
 
     const handleTodoDelete = (deleteId) => {
         console.log('you want to delete todo with id', deleteId);
-        const filteredMainArr = todosArr.filter((tObj) => tObj.id !== deleteId);
-        setTodosArr(filteredMainArr);
+        // const filteredMainArr = todosArr.filter((tObj) => tObj.id !== deleteId);
+        // setTodosArr(filteredMainArr);
     };
 
     const handleEditTodo = (editId, newTitle) => {
         console.log(`you want to edit todo '${ newTitle}' with id`, editId);
-        const newTodosArr = todosArr.map((tObj) => {
-            if (tObj.id === editId) {
-                const updatedTObj = {
-                    ...tObj,
-                    title: newTitle,
-                };
-                return updatedTObj;
-            }
-            return tObj;
-        })
-        setTodosArr(newTodosArr);
+        // const newTodosArr = todosArr.map((tObj) => {
+        //     if (tObj.id === editId) {
+        //         const updatedTObj = {
+        //             ...tObj,
+        //             title: newTitle,
+        //         };
+        //         return updatedTObj;
+        //     }
+        //     return tObj;
+        // })
+        // setTodosArr(newTodosArr);
     }
     console.log(todosArr);
 
     const handleCheckUncheckTodo = (id) => {
         console.log('check uncheck', id);
-        const newTodosArr = todosArr.map((tObj) => {
-            if (tObj.id === id) {
-                console.log(tObj.isDone);
-                const updatedTObj = {
-                    ...tObj,
-                    isDone: !tObj.isDone,
-                };
-                return updatedTObj;
-            }
-            return tObj;
-        })
-        setTodosArr(newTodosArr);
+        // const newTodosArr = todosArr.map((tObj) => {
+        //     if (tObj.id === id) {
+        //         console.log(tObj.isDone);
+        //         const updatedTObj = {
+        //             ...tObj,
+        //             isDone: !tObj.isDone,
+        //         };
+        //         return updatedTObj;
+        //     }
+        //     return tObj;
+        // })
+        // setTodosArr(newTodosArr);
     }
 
     const handleReset = () => {
         console.log('reset');
-        setTodosArr([]);
-        setTodoIdCounter(1);
+        // setTodosArr([]);
+        // setTodoIdCounter(1);
     }
 
     const [headerImage, setheaderImage] = useState('/img/gold.jpg');
