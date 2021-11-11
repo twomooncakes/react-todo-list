@@ -29,7 +29,7 @@ const MainWrapper = styled.div`
     align-items: center;
     justify-content: center;
 
-    i {
+    & i {
         cursor: pointer;
     }
 `;

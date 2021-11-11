@@ -2,13 +2,13 @@ import styled from "styled-components";
 import { useState } from 'react';
 import Icon from "./Icon";
 
-const ListItem  = styled.li`
+const ListItem = styled.li`
     padding: 15px;
     border-bottom: 1px solid lightgray;
-    text-decoration: ${props => props.isDone ? 'line-through' : ''};
-    color: ${props => props.isDone ? `rgba(${0}, ${0}, ${0}, ${0.555})` : '#212529'};
+    text-decoration: ${props => props.isDone ? 'line-through' : 'none'};
+    color: ${props => props.isDone ? 'rgba(0, 0, 0, 0.555)' : '#212529'};
 
-    i {
+    & i {
         font-size: 18px;
         cursor: pointer;
     }
