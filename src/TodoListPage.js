@@ -1,26 +1,11 @@
 import styled from "styled-components";
-import { useState, useEffect, useReducer } from 'react';
+import { useState, useEffect } from 'react';
 import TodoAddNew from './Todos/TodoAddNew';
 import TodoHeader from './Todos/TodoHeader';
 import TodoList from './Todos/TodoList';
 
-const initTodos = [
-  {
-    id: 1,
-    title: 'Drink coffee',
-    isDone: false,
-  },
-  {
-    id: 2,
-    title: 'Go to park',
-    isDone: true,
-  },
-  {
-    id: 3,
-    title: 'Make a pie',
-    isDone: false,
-  },
-];
+import { useSelector, useDispatch } from 'react-redux';
+import { todoListActions } from "./store/store";
 
 const ACTIONS = {
     ADD: 'add',
@@ -86,7 +71,11 @@ const Section = styled.section`
 `;
 
 function TodoListPage() {
-    const [todosArr, dispatch] = useReducer(todoReducer, initTodos);
+    // const [todosArr, dispatch] = useReducer(todoReducer, initTodos);
+    const todosArr = useSelector((state) => state.todoList.todos);
+    console.log(todosArr);
+
+    const dispatch = useDispatch();
 
     const lastTodoId = todosArr.length > 0 ? todosArr[todosArr.length-1].id : 0;
 
@@ -99,7 +88,8 @@ function TodoListPage() {
     }
 
     const handleAddNewTodo = (newTitle) => {
-        dispatch({type: ACTIONS.ADD, payload: generateTodo(newTitle)})
+        console.log('add new');
+        dispatch(todoListActions.add(generateTodo(newTitle)))
     };
 
     const handleTodoDelete = (deleteId) => {
@@ -110,17 +100,6 @@ function TodoListPage() {
     const handleEditTodo = (editId, newTitle) => {
         console.log(`you want to edit todo '${ newTitle}' with id`, editId);
         dispatch({type: ACTIONS.EDIT, payload: { editId, newTitle }});
-        // const newTodosArr = todosArr.map((tObj) => {
-        //     if (tObj.id === editId) {
-        //         const updatedTObj = {
-        //             ...tObj,
-        //             title: newTitle,
-        //         };
-        //         return updatedTObj;
-        //     }
-        //     return tObj;
-        // })
-        // setTodosArr(newTodosArr);
     }
     console.log(todosArr);
 
@@ -131,7 +110,8 @@ function TodoListPage() {
 
     const handleReset = () => {
         console.log('reset');
-        dispatch({type: ACTIONS.RESET})
+        // dispatch({type: ACTIONS.RESET})
+        dispatch(todoListActions.reset());
     }
 
     const [headerImage, setheaderImage] = useState('/img/gold.jpg');

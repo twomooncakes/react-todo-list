@@ -13,7 +13,7 @@ const MessageParagraph = styled.p`
 
 // TodoList
 function TodoList(props) {
-    props.todos.sort((a, b) => a.isDone - b.isDone);
+    // props.todos.sort((a, b) => a.isDone - b.isDone);
     return (
         <TodoUl>
         {props.todos.length === 0 ? <MessageParagraph>You have no tasks. Add a task below!</MessageParagraph> : props.todos.map((todo) => (
