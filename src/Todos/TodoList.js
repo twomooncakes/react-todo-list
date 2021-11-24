@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import TodoItem from './TodoItem';
+import { useSelector, useDispatch } from 'react-redux';
+import { todoListActions } from "../store/store";
 
 const TodoUl = styled.ul`
     list-style: none;
@@ -13,10 +15,14 @@ const MessageParagraph = styled.p`
 
 // TodoList
 function TodoList(props) {
-    // props.todos.sort((a, b) => a.isDone - b.isDone);
+    const todosArr = useSelector((state) => state.todoList.todos);
+
+    const dispatch = useDispatch();
+    dispatch(todoListActions.sort());
+
     return (
         <TodoUl>
-        {props.todos.length === 0 ? <MessageParagraph>You have no tasks. Add a task below!</MessageParagraph> : props.todos.map((todo) => (
+        {todosArr.length === 0 ? <MessageParagraph>You have no tasks. Add a task below!</MessageParagraph> : todosArr.map((todo) => (
             <TodoItem
                 key={todo.id}
                 title={todo.title}

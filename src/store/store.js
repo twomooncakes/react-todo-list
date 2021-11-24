@@ -30,17 +30,32 @@ const todoListSlice = createSlice({
         console.log(action.payload);
         state.todos = [...state.todos, action.payload];
       },
-    //   delete(state) {
-    //     state.counter--;
-    //   },
-    //   check(state, action) {
-    //     state.counter += action.payload;
-    //   },
-    //   edit(state) {
-    //     state.showCounter = !state.showCounter;
-    //   },
+      delete(state, action) {
+        state.todos = state.todos.filter(t => t.id !== action.payload);
+      },
+      check(state, action) {
+        state.todos = state.todos.map((t) => {
+            if (t.id === action.payload) return { 
+                ...t, 
+                isDone: !t.isDone 
+            };
+            return t;
+        });
+      },
+      edit(state, action) {
+        state.todos = state.todos.map((t) => {
+            if (t.id === action.payload.editId) return { 
+                ...t, 
+                title: action.payload.newTitle 
+            };
+            return t;
+        });
+      },
       reset(state) {
         state.todos = [];
+      },
+      sort(state) {
+        state.todos = state.todos.sort((a, b) => a.isDone - b.isDone)
       },
     },
 });
