@@ -45,7 +45,13 @@ function todoReducer(todosArr, action) {
                 return t;
             });
         case ACTIONS.EDIT:
-            return console.log('edit');
+            return todosArr.map((t) => {
+                if (t.id === action.payload.editId) return { 
+                    ...t, 
+                    title: action.payload.newTitle 
+                };
+                return t;
+            });
         case ACTIONS.RESET:
             return todosArr = [];
         default:
@@ -103,17 +109,7 @@ function TodoListPage() {
 
     const handleEditTodo = (editId, newTitle) => {
         console.log(`you want to edit todo '${ newTitle}' with id`, editId);
-        // const newTodosArr = todosArr.map((tObj) => {
-        //     if (tObj.id === editId) {
-        //         const updatedTObj = {
-        //             ...tObj,
-        //             title: newTitle,
-        //         };
-        //         return updatedTObj;
-        //     }
-        //     return tObj;
-        // })
-        // setTodosArr(newTodosArr);
+        dispatch({type: ACTIONS.EDIT, payload: { editId, newTitle }});
     }
     console.log(todosArr);
 
