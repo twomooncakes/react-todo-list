@@ -7,44 +7,6 @@ import TodoList from './Todos/TodoList';
 import { useSelector, useDispatch } from 'react-redux';
 import { todoListActions } from "./store/store";
 
-const ACTIONS = {
-    ADD: 'add',
-    DELETE: 'delete',
-    CHECK: 'check',
-    EDIT: 'edit',
-    RESET: 'reset',
-}
-
-function todoReducer(todosArr, action) {
-    switch(action.type) {
-        case ACTIONS.ADD:
-            return [...todosArr, action.payload];
-        case ACTIONS.DELETE:
-            return todosArr.filter(t => t.id !== action.payload);
-        case ACTIONS.CHECK:
-            return todosArr.map((t) => {
-                if (t.id === action.payload) return { 
-                    ...t, 
-                    isDone: !t.isDone 
-                };
-                return t;
-            });
-        case ACTIONS.EDIT:
-            return todosArr.map((t) => {
-                if (t.id === action.payload.editId) return { 
-                    ...t, 
-                    title: action.payload.newTitle 
-                };
-                return t;
-            });
-        case ACTIONS.RESET:
-            return todosArr = [];
-        default:
-            console.log('type not found');
-            return todosArr;
-    }
-};
-
 const MainWrapper = styled.div`
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     display: flex;
@@ -71,9 +33,7 @@ const Section = styled.section`
 `;
 
 function TodoListPage() {
-    // const [todosArr, dispatch] = useReducer(todoReducer, initTodos);
     const todosArr = useSelector((state) => state.todoList.todos);
-    console.log(todosArr);
 
     const dispatch = useDispatch();
 
@@ -94,23 +54,22 @@ function TodoListPage() {
 
     const handleTodoDelete = (deleteId) => {
         console.log('you want to delete todo with id', deleteId);
-        dispatch({type: ACTIONS.DELETE, payload: deleteId});
+        dispatch(todoListActions.delete(deleteId));
     };
 
     const handleEditTodo = (editId, newTitle) => {
         console.log(`you want to edit todo '${ newTitle}' with id`, editId);
-        dispatch({type: ACTIONS.EDIT, payload: { editId, newTitle }});
+        dispatch(todoListActions.edit({editId, newTitle}));
     }
     console.log(todosArr);
 
     const handleCheckUncheckTodo = (checkId) => {
         console.log('check uncheck', checkId);
-        dispatch({type: ACTIONS.CHECK, payload: checkId});
+        dispatch(todoListActions.check(checkId));
     }
 
     const handleReset = () => {
         console.log('reset');
-        // dispatch({type: ACTIONS.RESET})
         dispatch(todoListActions.reset());
     }
 
